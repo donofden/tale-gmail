@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 // [START tale_gmail]
-package labels
+package talegmail
 
 import (
 	"encoding/json"
