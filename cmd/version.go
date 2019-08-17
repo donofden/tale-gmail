@@ -27,13 +27,13 @@ var versionCmd = &cobra.Command{
 	Short: "Get the version of the ap;lication.",
 	Long:  `Get the version of the ap;lication.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("version called")
+		fmt.Println("Tale-gmail v1.0")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(versionCmd)
-	fmt.Println("Hello World! - My Version is 1.0")
+
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

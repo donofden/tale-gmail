@@ -15,7 +15,7 @@ limitations under the License.
 */
 package main
 
-import "gitHub.com/donofden/tale-gmail/cmd"
+import "github.com/donofden/tale-gmail/cmd"
 
 func main() {
   cmd.Execute()
