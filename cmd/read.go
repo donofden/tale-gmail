@@ -13,7 +13,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 */
-// cmd package
 package cmd
 
 import (
@@ -21,16 +20,26 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// labelsCmd represents the labels command
-var labelsCmd = &cobra.Command{
-	Use:   "labels",
-	Short: "Get Labels used in Gmail Account",
-	Long:  `Get Labels used in Gmail Account as a list`,
+// readCmd represents the read command
+var readCmd = &cobra.Command{
+	Use:   "read",
+	Short: "Read All Gmail",
+	Long:  `Read All Gmail`,
 	Run: func(cmd *cobra.Command, args []string) {
-		talegmail.ListLabels()
+		talegmail.ReadMail()
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(labelsCmd)
+	rootCmd.AddCommand(readCmd)
+
+	// Here you will define your flags and configuration settings.
+
+	// Cobra supports Persistent Flags which will work for this command
+	// and all subcommands, e.g.:
+	// readCmd.PersistentFlags().String("foo", "", "A help for foo")
+
+	// Cobra supports local flags which will only run when this command
+	// is called directly, e.g.:
+	// readCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
