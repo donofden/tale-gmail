@@ -19,8 +19,7 @@ import (
 	"fmt"
 	"os"
 
-  "github.com/spf13/cobra"
-  "github.com/donofden/tale-gmail/pkg/talegmail"
+	"github.com/spf13/cobra"
 
 	homedir "github.com/mitchellh/go-homedir"
 	"github.com/spf13/viper"
@@ -59,9 +58,6 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.tale-gmail.yaml)")
 
-	rootCmd.AddCommand(
-		talegmail.mailMain(),
-	)
 	// Cobra also supports local flags, which will only run
 	// when this action is called directly.
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
