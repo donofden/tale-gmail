@@ -14,3 +14,10 @@
 # Gmail Credentials and Token
 credentials.json
 token.json
+
+# Go ignore vendor
+vendor/
+
+# Go Binnary
+bin/
+/tale-gmail
