@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+# 
+# Git pre-commit hook
+#
+
+echo "checking.."
+echo ""
+# Check for changes in pkg/ folder and update tree
+
+function loop_check_file_changes
+{
+    return=0
+    # Check for changes in pkg/ folder
+    while read FILE; do
+        let return++;
+        if [[ "$FILE" =~ ^.+(go|md)$ ]]; then
+            # To check if the README.md file is present in the commit files
+            if [[ $FILE == "pkg/README.md" ]]; then
+                return 0;
+            fi
+        fi
+    done < <(git diff --cached --name-only --diff-filter=ACM pkg/ )
+    return $return;
+}
+
+# trigger loop and get the return vale if file is changes
+loop_check_file_changes; fileadded="$?"
+
+echo "check finished.."
+
+if [[ $fileadded -ne 0 ]]; then
+    echo -e " 🤷‍♂️  You need to update tree in "pkg/README.md" kindly run 'tree' in pkg folder and update the README.md or copy paste the below." >&2
+    cd pkg && tree
+    exit 1
+fi
