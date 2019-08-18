@@ -5,8 +5,8 @@
 
 echo "checking.."
 echo ""
-# Check for changes in pkg/ folder and update tree
 
+# Check for changes in pkg/ folder and update tree
 function loop_check_file_changes
 {
     return=0
@@ -23,7 +23,7 @@ function loop_check_file_changes
     return $return;
 }
 
-# trigger loop and get the return vale if file is changes
+# trigger loop and get the return value if file is changes
 loop_check_file_changes; fileadded="$?"
 
 echo "check finished.."
