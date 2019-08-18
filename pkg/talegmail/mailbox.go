@@ -20,22 +20,33 @@ package talegmail
 import (
 	"fmt"
 	"log"
+	"sort"
 
 	"github.com/donofden/tale-gmail/pkg/gmailparser"
 )
 
-// ReadMail exported
-func ReadMail() {
+// Mailbox exported
+func Mailbox(option string) {
 	srv := gmailService()
-
 	user := "me"
+	var query string
 
+	fmt.Println("Fetching emails - ", option)
+	switch option {
+	case "unread-emails":
+		query = "is:unread"
+	case "drafts":
+		query = "in:drafts"
+	default:
+		query = "in:inbox"
+		fmt.Println("Default Query Processed - Get Inbox Emails")
+	}
 	var total int64
 	msgs := []message{}
 	emailMsgs := []gmailparser.Email{}
 	pageToken := ""
 	for {
-		req := srv.Users.Messages.List(user).Q("larger:5M")
+		req := srv.Users.Messages.List(user).Q(query)
 		if pageToken != "" {
 			req.PageToken(pageToken)
 		}
@@ -62,7 +73,8 @@ func ReadMail() {
 			//body := mail.GetMessageBody(msg.Payload.Parts)
 			sender := gmailparser.GetMessageSender(msg.Payload.Headers)
 			subject := gmailparser.GetMessageSubject(msg.Payload.Headers)
-
+			fmt.Printf("Subject - <%v> \n", subject)
+			//fmt.Printf("sender <%v> \n", emailMsgs)
 			msgs = append(msgs, message{
 				size:    msg.SizeEstimate,
 				gmailID: msg.Id,
@@ -76,7 +88,6 @@ func ReadMail() {
 				Sender:  sender,
 			})
 		}
-		fmt.Printf("sender <%v> \n", emailMsgs)
 
 		if r.NextPageToken == "" {
 			break
@@ -84,8 +95,36 @@ func ReadMail() {
 		pageToken = r.NextPageToken
 	}
 	log.Printf("total: %v\n", total)
+}
 
-	sortBySize(msgs)
+type messageSorter struct {
+	msg  []message
+	less func(i, j message) bool
+}
+
+func sortBySize(msg []message) {
+	sort.Sort(messageSorter{msg, func(i, j message) bool {
+		return i.size > j.size
+	}})
+}
+
+func (s messageSorter) Len() int {
+	return len(s.msg)
+}
+
+func (s messageSorter) Swap(i, j int) {
+	s.msg[i], s.msg[j] = s.msg[j], s.msg[i]
+}
+
+func (s messageSorter) Less(i, j int) bool {
+	return s.less(s.msg[i], s.msg[j])
+}
+
+type message struct {
+	size    int64
+	gmailID string
+	date    string // retrieved from message header
+	snippet string
 }
 
 // [END gmail_quickstart]

@@ -16,9 +16,18 @@ limitations under the License.
 package cmd
 
 import (
+	"os"
+
 	"github.com/donofden/tale-gmail/pkg/talegmail"
 	"github.com/spf13/cobra"
 )
+
+// ListOptions provides the flags for the `list` command
+type ListOptions struct {
+	UnreadMails bool
+	Drafts      bool
+	refs        []string
+}
 
 // readCmd represents the read command
 var readCmd = &cobra.Command{
@@ -30,8 +39,31 @@ var readCmd = &cobra.Command{
 	},
 }
 
+// mailboxCmd represents the mailbox command
+var mailboxCmd = &cobra.Command{
+
+	Use:   "mailbox",
+	Short: "To Work on the Mailbox",
+	Long:  `To Work on the Mailbox`,
+	Run: func(cmd *cobra.Command, args []string) {
+		if len(args) > 0 {
+			talegmail.Mailbox(args[0])
+		}
+		if len(args) == 0 {
+			cmd.Help()
+			os.Exit(0)
+		}
+	},
+}
+
 func init() {
+	var opts ListOptions
 	rootCmd.AddCommand(readCmd)
+	rootCmd.AddCommand(mailboxCmd)
+
+	flags := mailboxCmd.Flags()
+	flags.BoolVar(&opts.UnreadMails, "unread-emails", false, "View all unread emails")
+	flags.BoolVar(&opts.Drafts, "drafts", false, "View all drafts")
 
 	// Here you will define your flags and configuration settings.
 
