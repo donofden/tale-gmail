@@ -19,7 +19,8 @@ function loop_check_file_changes
                 return 0;
             fi
         fi
-    done < <(git diff --cached --name-only --diff-filter=ACM pkg/ )
+    # Git --diff-filter: A - Added, C - Copied, R - Renamed. Run `man git-diff` for more options
+    done < <(git diff --cached --name-only --diff-filter=ACR pkg/ )
     return $return;
 }
 
